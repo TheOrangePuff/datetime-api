@@ -1,0 +1,18 @@
+name: Test Datetime API
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Docker image
+      run: docker build -t datetime_api_test .
+    - name: Run tests in Docker container
+      run: docker run datetime_api_test pytest
