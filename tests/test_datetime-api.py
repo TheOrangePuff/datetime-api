@@ -15,12 +15,30 @@ def client():
 def test_days(client):
     """Test the correct number of days is returned from two dates"""
     test_data = [
-        {"date1": "2021-01-01", "date2": "2022-01-01", "result": b'365'},
-        {"date1": "2021-01-01", "date2": "2021-01-31", "result": b'30'},
-        {"date1": "1984-01-01", "date2": "1985-01-01", "result": b'366'},
-        {"date1": "2021-01-01", "date2": "2021-01-01", "result": b'0'},
+        {"start_date": "2021-01-01", "end_date": "2022-01-01", "result": b'365'},
+        {"start_date": "2021-01-01", "end_date": "2021-01-02", "result": b'1'},
+        {"start_date": "2021-01-02", "end_date": "2021-01-03", "result": b'1'},
+        {"start_date": "2021-01-01", "end_date": "2021-01-31", "result": b'30'},
+        {"start_date": "1984-01-01", "end_date": "1985-01-01", "result": b'366'},
+        {"start_date": "2021-01-01", "end_date": "2021-01-01", "result": b'0'},
     ]
 
     for data in test_data:
-        rv = client.get('/days?date1=' + data.get("date1") + '&date2=' + data.get("date2"))
+        rv = client.get('/days?start_date=' + data.get("start_date") + '&end_date=' + data.get("end_date"))
+        assert data.get("result") in rv.data
+
+
+def test_weekdays(client):
+    """Test the correct number of weekdays is returned from two dates"""
+    test_data = [
+        {"start_date": "2021-01-01", "end_date": "2022-01-01", "result": b'261'},
+        {"start_date": "2021-01-01", "end_date": "2021-01-02", "result": b'1'},
+        {"start_date": "2021-01-02", "end_date": "2021-01-03", "result": b'0'},
+        {"start_date": "2021-01-01", "end_date": "2021-01-31", "result": b'21'},
+        {"start_date": "1984-01-01", "end_date": "1985-01-01", "result": b'261'},
+        {"start_date": "2021-01-01", "end_date": "2021-01-01", "result": b'0'},
+    ]
+
+    for data in test_data:
+        rv = client.get('/weekdays?start_date=' + data.get("start_date") + '&end_date=' + data.get("end_date"))
         assert data.get("result") in rv.data
