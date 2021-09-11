@@ -53,3 +53,29 @@ def weekdays():
     }
 
     return response
+
+
+@bp.route("/completeweeks")
+def completeweeks():
+    """Get the number of weekdays between two datetime parameters"""
+    start_date = request.args.get("start_date")
+    end_date = request.args.get("end_date")
+    unit = request.args.get("unit") or "weeks"
+
+    date = parser.parse(start_date), parser.parse(end_date)
+    difference = date[1] - date[0]
+    difference = difference.days
+
+    # Get the number of complete weeks
+    # if difference is negative don't floor the result
+    if difference >= 0:
+        weeks = math.floor(difference / 7)
+    else:
+        weeks = math.ceil(difference / 7)
+
+    response = {
+        "difference": weeks,
+        "unit": unit
+    }
+
+    return response
