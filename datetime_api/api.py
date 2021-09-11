@@ -28,19 +28,24 @@ class DifferenceBetween:
         return self.difference
 
     def secondsBetween(self):
+        """Get the number of seconds between the start and end date"""
         return self.daysBetween() * 86400
 
     def minutesBetween(self):
+        """Get the number of minutes between the start and end date"""
         return self.daysBetween() * 1440
 
     def hoursBetween(self):
+        """Get the number of hours between the start and end date"""
         return self.daysBetween() * 24
 
     def daysBetween(self):
+        """Get the number of days between the start and end date"""
         difference = self.end_date - self.start_date
         return difference.days
 
     def weekdaysBetween(self):
+        """Get the number of weeks between the start and end date"""
         # Get the number of complete weeks
         weeks = math.floor(self.daysBetween() / 7)
         # Use that to calculate the number of weekdays
@@ -55,6 +60,10 @@ class DifferenceBetween:
         return weekdays
 
     def completeWeeksBetween(self):
+        """
+        Get the number of complete weeks between the start and end date.
+        A complete week is 7 consecutive days.
+        """
         # Get the number of complete weeks
         # if difference is negative don't floor the result
         difference = self.daysBetween()
@@ -66,10 +75,11 @@ class DifferenceBetween:
         return weeks
 
     def yearsBetween(self):
+        """Get the number of years between the start and end date"""
         return self.daysBetween() / 365
 
 
-@bp.route("/days")
+@bp.route("/days", methods=['GET', 'POST'])
 def days():
     """Get the number of days between two datetime parameters"""
     start_date = request.args.get("start_date")
@@ -86,7 +96,7 @@ def days():
     return response
 
 
-@bp.route("/weekdays")
+@bp.route("/weekdays", methods=['GET', 'POST'])
 def weekdays():
     """Get the number of weekdays between two datetime parameters"""
     start_date = request.args.get("start_date")
@@ -103,7 +113,7 @@ def weekdays():
     return response
 
 
-@bp.route("/completeweeks")
+@bp.route("/completeweeks", methods=['GET', 'POST'])
 def completeweeks():
     """Get the number of weekdays between two datetime parameters"""
     start_date = request.args.get("start_date")
