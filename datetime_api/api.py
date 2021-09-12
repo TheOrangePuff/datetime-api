@@ -1,5 +1,6 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, abort
 from datetime import datetime, timedelta
+from werkzeug.exceptions import BadRequest
 from dateutil import parser
 import math
 
@@ -9,6 +10,10 @@ bp = Blueprint("api", __name__)
 class DifferenceBetween:
     def __init__(self, start_date, end_date, unit):
         self.unit = unit
+
+        self.validate_unit()
+        self.validate_date(start_date)
+        self.validate_date(end_date)
 
         self.start_date = parser.parse(start_date)
         self.end_date = parser.parse(end_date)
@@ -25,6 +30,20 @@ class DifferenceBetween:
             self.difference = self.weeksBetween()
         elif self.unit == "years":
             self.difference = self.yearsBetween()
+
+    def validate_unit(self):
+        valid_units = ["seconds", "minutes", "hours", "days", "weeks", "years"]
+
+        if not self.unit in valid_units:
+            abort(400, "Invalid unit provided. Must be seconds, minutes, hours, days, weeks or years.")
+
+    def validate_date(self, date):
+        if date is None:
+            abort(400, "Must supply both a start and end date.")
+        try:
+            parser.parse(date)
+        except ValueError:
+            abort(400, "Invalid date format.")
 
     def getDifference(self):
         return self.difference
@@ -92,6 +111,14 @@ class DifferenceBetweenCompleteWeeks(DifferenceBetween):
     def daysBetween(self):
         """Get the number of days between the start and end date"""
         return self.weeksBetween() * 7
+
+
+@bp.errorhandler(BadRequest)
+def handle_bad_request(e):
+    response = {
+        "error": e.description
+    }
+    return response, 400
 
 
 @bp.route("/days", methods=['GET', 'POST'])
