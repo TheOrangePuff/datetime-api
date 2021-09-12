@@ -1,0 +1,19 @@
+{
+  "executionRoleArn": "arn:aws:iam::667951768655:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "portMappings": [
+        {
+          "containerPort": "80",
+          "protocol": "tcp"
+        }
+      ],
+      "image": "667951768655.dkr.ecr.ap-southeast-2.amazonaws.com/datetime-api:86a4ee9f145383ca93287ef0d6c5ea5ad9147267",
+      "name": "datetime-api"
+    }
+  ],
+  "memory": "512",
+  "family": "datetime-api",
+  "networkMode": "awsvpc",
+  "cpu": "256"
+}
