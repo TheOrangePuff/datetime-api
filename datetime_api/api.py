@@ -2,6 +2,7 @@ from flask import Blueprint, request, abort
 from datetime import datetime, timedelta
 from werkzeug.exceptions import BadRequest
 from dateutil import parser
+from dateutil.tz import UTC
 import math
 
 bp = Blueprint("api", __name__)
@@ -18,6 +19,19 @@ class DifferenceBetween:
         self.start_date = parser.parse(start_date)
         self.end_date = parser.parse(end_date)
 
+        # Add the UTC timezone if none if provided
+        if not self.start_date.tzinfo:
+            self.start_date = datetime(self.start_date.year, self.start_date.month,
+                                       self.start_date.day, self.start_date.hour,
+                                       self.start_date.minute, self.start_date.second,
+                                       tzinfo=UTC)
+        if not self.end_date.tzinfo:
+            self.end_date = datetime(self.end_date.year, self.end_date.month,
+                                     self.end_date.day, self.end_date.hour,
+                                     self.end_date.minute, self.end_date.second,
+                                     tzinfo=UTC)
+
+        # Set difference to the correct unit
         if self.unit == "seconds":
             self.difference = self.secondsBetween()
         elif self.unit == "minutes":
@@ -50,15 +64,16 @@ class DifferenceBetween:
 
     def secondsBetween(self):
         """Get the number of seconds between the start and end date"""
-        return self.daysBetween() * 86400
+        difference = self.end_date - self.start_date
+        return int(difference.total_seconds())
 
     def minutesBetween(self):
         """Get the number of minutes between the start and end date"""
-        return self.daysBetween() * 1440
+        return self.secondsBetween() / 60
 
     def hoursBetween(self):
         """Get the number of hours between the start and end date"""
-        return self.daysBetween() * 24
+        return self.minutesBetween() / 60
 
     def daysBetween(self):
         """Get the number of days between the start and end date"""
@@ -91,6 +106,10 @@ class DifferenceBetweenWeekdays(DifferenceBetween):
 
         return weekdays
 
+    def secondsBetween(self):
+        """Get the number of seconds between the start and end date"""
+        return self.daysBetween() * 86400
+
 
 class DifferenceBetweenCompleteWeeks(DifferenceBetween):
     def weeksBetween(self):
@@ -111,6 +130,10 @@ class DifferenceBetweenCompleteWeeks(DifferenceBetween):
     def daysBetween(self):
         """Get the number of days between the start and end date"""
         return self.weeksBetween() * 7
+
+    def secondsBetween(self):
+        """Get the number of seconds between the start and end date"""
+        return self.daysBetween() * 86400
 
 
 @bp.errorhandler(BadRequest)

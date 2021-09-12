@@ -58,6 +58,19 @@ class TestAPI(unittest.TestCase):
         self.run_test_get("days", test_data)
         self.run_test_post("days", test_data)
 
+    def test_days_timezone(self):
+        """Test the correct number of days is returned from two dates"""
+        test_data = [
+            {"start_date": "2020-12-31T2300%2B0100", "end_date": "2022-01-01T1030-1030", "result": 365},
+            {"start_date": "2021-01-01T0100-0100", "end_date": "2021-01-02T1030-1030", "result": 1},
+            {"start_date": "2022-01-01T0100-0100", "end_date": "2021-01-01T1030-1030", "result": -365},
+            {"start_date": "2021-01-01T0100-0100", "end_date": "2021-01-01T1030-1030", "result": 0},
+            {"start_date": "2021-01-01-0100", "end_date": "2021-01-01", "unit": "hours", "result": -1},
+        ]
+
+        self.run_test_get("days", test_data)
+        self.run_test_post("days", test_data)
+
     def test_days_units(self):
         """
         Test the correct number of seconds, minutes, hours or years is returned
