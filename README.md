@@ -1,6 +1,7 @@
 # Datetime API
 
 [![Test Datetime API](https://github.com/TheOrangePuff/datetime-api/actions/workflows/test.yml/badge.svg)](https://github.com/TheOrangePuff/datetime-api/actions/workflows/test.yml)
+[![AWS Deployment](https://github.com/TheOrangePuff/datetime-api/actions/workflows/deploy.yml/badge.svg)](https://github.com/TheOrangePuff/datetime-api/actions/workflows/deploy.yml)
 
 An API to calculate the difference in time between two dates.
 
