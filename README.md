@@ -8,7 +8,7 @@ An API to calculate the difference in time between two dates.
 
 Clone the repository
 ```bash
-git clone git@github.com:TheOrangePuff/datetime-api.git
+git clone git@github.com:TheOrangePuff/datetime-api.git && cd datetime-api
 ```
 
 Build and run the Dockerfile
