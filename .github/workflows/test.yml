@@ -7,18 +7,13 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Build Docker image
       id: build-docker-image
       run: docker build -t datetime_api_test .
-
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run tests in Docker container
-        id: run-tests
-        run: docker run datetime_api_test pytest
+    - name: Run tests in Docker container
+      id: run-tests
+      run: docker run datetime_api_test pytest
