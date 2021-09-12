@@ -79,6 +79,11 @@ class TestAPI(unittest.TestCase):
             {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "hours", "result": 8784},
             {"start_date": "2021-01-01", "end_date": "2021-01-01", "unit": "hours", "result": 0},
             {"start_date": "2022-01-01", "end_date": "2021-01-01", "unit": "hours", "result": -8760},
+            {"start_date": "2021-01-01", "end_date": "2022-01-01", "unit": "weeks", "result": 52.142857142857146},
+            {"start_date": "2021-01-01", "end_date": "2021-01-02", "unit": "weeks", "result": 0.14285714285714285},
+            {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "weeks", "result": 52.285714285714285},
+            {"start_date": "2021-01-01", "end_date": "2021-01-01", "unit": "weeks", "result": 0},
+            {"start_date": "2022-01-01", "end_date": "2021-01-01", "unit": "weeks", "result": -52.142857142857146},
             {"start_date": "2021-01-01", "end_date": "2022-01-01", "unit": "years", "result": 1},
             {"start_date": "2021-01-01", "end_date": "2021-01-02", "unit": "years", "result": 0.0027397260273972603},
             {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "years", "result": 1.0027397260273972603},
@@ -104,6 +109,42 @@ class TestAPI(unittest.TestCase):
         self.run_test_get("weekdays", test_data)
         self.run_test_post("weekdays", test_data)
 
+    def test_weekdays_units(self):
+        """
+        Test the correct number of seconds, minutes, hours or years is returned
+        from two dates
+        """
+        test_data = [
+            {"start_date": "2021-01-01", "end_date": "2022-01-01", "unit": "seconds", "result": 22550400},
+            {"start_date": "2021-01-01", "end_date": "2021-01-02", "unit": "seconds", "result": 86400},
+            {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "seconds", "result": 22550400},
+            {"start_date": "2021-01-01", "end_date": "2021-01-01", "unit": "seconds", "result": 0},
+            {"start_date": "2022-01-01", "end_date": "2021-01-01", "unit": "seconds", "result": -22550400},
+            {"start_date": "2021-01-01", "end_date": "2022-01-01", "unit": "minutes", "result": 375840},
+            {"start_date": "2021-01-01", "end_date": "2021-01-02", "unit": "minutes", "result": 1440},
+            {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "minutes", "result": 375840},
+            {"start_date": "2021-01-01", "end_date": "2021-01-01", "unit": "minutes", "result": 0},
+            {"start_date": "2022-01-01", "end_date": "2021-01-01", "unit": "minutes", "result": -375840},
+            {"start_date": "2021-01-01", "end_date": "2022-01-01", "unit": "hours", "result": 6264},
+            {"start_date": "2021-01-01", "end_date": "2021-01-02", "unit": "hours", "result": 24},
+            {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "hours", "result": 6264},
+            {"start_date": "2021-01-01", "end_date": "2021-01-01", "unit": "hours", "result": 0},
+            {"start_date": "2022-01-01", "end_date": "2021-01-01", "unit": "hours", "result": -6264},
+            {"start_date": "2021-01-01", "end_date": "2022-01-01", "unit": "weeks", "result": 37.285714285714285},
+            {"start_date": "2021-01-01", "end_date": "2021-01-02", "unit": "weeks", "result": 0.14285714285714285},
+            {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "weeks", "result": 37.285714285714285},
+            {"start_date": "2021-01-01", "end_date": "2021-01-01", "unit": "weeks", "result": 0},
+            {"start_date": "2022-01-01", "end_date": "2021-01-01", "unit": "weeks", "result": -37.285714285714285},
+            {"start_date": "2021-01-01", "end_date": "2022-01-01", "unit": "years", "result": 0.7150684931506849},
+            {"start_date": "2021-01-01", "end_date": "2021-01-02", "unit": "years", "result": 0.0027397260273972603},
+            {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "years", "result": 0.7150684931506849},
+            {"start_date": "2021-01-01", "end_date": "2021-01-01", "unit": "years", "result": 0},
+            {"start_date": "2022-01-01", "end_date": "2021-01-01", "unit": "years", "result": -0.7150684931506849},
+        ]
+
+        self.run_test_get("weekdays", test_data)
+        self.run_test_post("weekdays", test_data)
+
     def test_completeweeks(self):
         """Test the correct number of weekdays is returned from two dates"""
         test_data = [
@@ -114,6 +155,42 @@ class TestAPI(unittest.TestCase):
             {"start_date": "1984-01-01", "end_date": "1985-01-01", "result": 52},
             {"start_date": "2021-01-01", "end_date": "2021-01-01", "result": 0},
             {"start_date": "2022-01-01", "end_date": "2021-01-01", "result": -52},
+        ]
+
+        self.run_test_get("completeweeks", test_data)
+        self.run_test_post("completeweeks", test_data)
+
+    def test_completeweeks_units(self):
+        """
+        Test the correct number of seconds, minutes, hours or years is returned
+        from two dates
+        """
+        test_data = [
+            {"start_date": "2021-01-01", "end_date": "2022-01-01", "unit": "seconds", "result": 31449600},
+            {"start_date": "2021-01-01", "end_date": "2021-01-02", "unit": "seconds", "result": 0},
+            {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "seconds", "result": 31449600},
+            {"start_date": "2021-01-01", "end_date": "2021-01-01", "unit": "seconds", "result": 0},
+            {"start_date": "2022-01-01", "end_date": "2021-01-01", "unit": "seconds", "result": -31449600},
+            {"start_date": "2021-01-01", "end_date": "2022-01-01", "unit": "minutes", "result": 524160},
+            {"start_date": "2021-01-01", "end_date": "2021-01-02", "unit": "minutes", "result": 0},
+            {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "minutes", "result": 524160},
+            {"start_date": "2021-01-01", "end_date": "2021-01-01", "unit": "minutes", "result": 0},
+            {"start_date": "2022-01-01", "end_date": "2021-01-01", "unit": "minutes", "result": -524160},
+            {"start_date": "2021-01-01", "end_date": "2022-01-01", "unit": "hours", "result": 8736},
+            {"start_date": "2021-01-01", "end_date": "2021-01-02", "unit": "hours", "result": 0},
+            {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "hours", "result": 8736},
+            {"start_date": "2021-01-01", "end_date": "2021-01-01", "unit": "hours", "result": 0},
+            {"start_date": "2022-01-01", "end_date": "2021-01-01", "unit": "hours", "result": -8736},
+            {"start_date": "2021-01-01", "end_date": "2022-01-01", "unit": "days", "result": 364},
+            {"start_date": "2021-01-01", "end_date": "2021-01-02", "unit": "days", "result": 0},
+            {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "days", "result": 364},
+            {"start_date": "2021-01-01", "end_date": "2021-01-01", "unit": "days", "result": 0},
+            {"start_date": "2022-01-01", "end_date": "2021-01-01", "unit": "days", "result": -364},
+            {"start_date": "2021-01-01", "end_date": "2022-01-01", "unit": "years", "result": 0.9972602739726028},
+            {"start_date": "2021-01-01", "end_date": "2021-01-02", "unit": "years", "result": 0},
+            {"start_date": "1984-01-01", "end_date": "1985-01-01", "unit": "years", "result": 0.9972602739726028},
+            {"start_date": "2021-01-01", "end_date": "2021-01-01", "unit": "years", "result": 0},
+            {"start_date": "2022-01-01", "end_date": "2021-01-01", "unit": "years", "result": -0.9972602739726028},
         ]
 
         self.run_test_get("completeweeks", test_data)

@@ -21,6 +21,8 @@ class DifferenceBetween:
             self.difference = self.hoursBetween()
         elif self.unit == "days":
             self.difference = self.daysBetween()
+        elif self.unit == "weeks":
+            self.difference = self.weeksBetween()
         elif self.unit == "years":
             self.difference = self.yearsBetween()
 
@@ -44,10 +46,21 @@ class DifferenceBetween:
         difference = self.end_date - self.start_date
         return difference.days
 
-    def weekdaysBetween(self):
+    def weeksBetween(self):
         """Get the number of weeks between the start and end date"""
+        return self.daysBetween() / 7
+
+    def yearsBetween(self):
+        """Get the number of years between the start and end date"""
+        return self.daysBetween() / 365
+
+
+class DifferenceBetweenWeekdays(DifferenceBetween):
+    def daysBetween(self):
+        """Get the number of days between the start and end date"""
         # Get the number of complete weeks
-        weeks = math.floor(self.daysBetween() / 7)
+        difference = self.end_date - self.start_date
+        weeks = math.floor(difference.days / 7)
         # Use that to calculate the number of weekdays
         weekdays = weeks * 5
         # Count the weekdays of the last incomplete week
@@ -59,14 +72,16 @@ class DifferenceBetween:
 
         return weekdays
 
-    def completeWeeksBetween(self):
+
+class DifferenceBetweenCompleteWeeks(DifferenceBetween):
+    def weeksBetween(self):
         """
         Get the number of complete weeks between the start and end date.
         A complete week is 7 consecutive days.
         """
         # Get the number of complete weeks
         # if difference is negative don't floor the result
-        difference = self.daysBetween()
+        difference = (self.end_date - self.start_date).days
         if difference >= 0:
             weeks = math.floor(difference / 7)
         else:
@@ -74,9 +89,9 @@ class DifferenceBetween:
 
         return weeks
 
-    def yearsBetween(self):
-        """Get the number of years between the start and end date"""
-        return self.daysBetween() / 365
+    def daysBetween(self):
+        """Get the number of days between the start and end date"""
+        return self.weeksBetween() * 7
 
 
 @bp.route("/days", methods=['GET', 'POST'])
@@ -103,7 +118,7 @@ def weekdays():
     end_date = request.args.get("end_date")
     unit = request.args.get("unit") or "days"
 
-    weekdays = DifferenceBetween(start_date, end_date, unit).weekdaysBetween()
+    weekdays = DifferenceBetweenWeekdays(start_date, end_date, unit).getDifference()
 
     response = {
         "difference": weekdays,
@@ -120,7 +135,7 @@ def completeweeks():
     end_date = request.args.get("end_date")
     unit = request.args.get("unit") or "weeks"
 
-    weeks = DifferenceBetween(start_date, end_date, unit).completeWeeksBetween()
+    weeks = DifferenceBetweenCompleteWeeks(start_date, end_date, unit).getDifference()
 
     response = {
         "difference": weeks,
