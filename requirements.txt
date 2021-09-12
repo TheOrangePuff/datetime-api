@@ -1,4 +1,4 @@
 Flask
-uwsgi
+gunicorn
 pytest
 python-dateutil
